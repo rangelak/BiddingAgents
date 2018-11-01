@@ -54,6 +54,14 @@ class VCG:
 
             # TODO: Compute the payment and return it.
 
+            #######################
+            # Implementation Here #
+            #######################
+
+            return (0 if k >= n else (c[k]*valid_bids[n][1] if (k == (n-1) and len(valid_bids) > n)
+                else (c[k]*valid_bids[n][1] if (k == (n-1) and len(valid_bids) <= n)
+                    else (c[k] - c[k+1])*just_bids[k+1] + total_payment(k+1))))
+
         def norm(totals):
             """Normalize total payments by the clicks in each slot"""
             return map(lambda (x,y): x/y, zip(totals, slot_clicks))

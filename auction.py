@@ -330,6 +330,7 @@ def main(args):
     total_spent = [0 for i in range(n)]
 
     ##  iters = no. of samples to take
+    print("options = " + str(options))
     for i in range(options.iters):
         values = get_utils(n, options)
         logging.info("==== Iteration %d / %d.  Values %s ====" % (i, options.iters, values))
@@ -374,6 +375,13 @@ def main(args):
     std = stddev(total_revenues)
     logging.warning("Average daily revenue (stddev): $%.2f ($%.2f)" % (0.01 * m, 0.01*std))
 
+
+    ###############
+    # ERASE LATER #
+    ###############
+
+    return (0.01*m, 0.01*std)
+
 #print "config", config.budget
     
 
@@ -384,4 +392,5 @@ def main(args):
 
 
 if __name__ == "__main__":
+    print(sys.argv)
     main(sys.argv)
