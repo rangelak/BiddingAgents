@@ -28,12 +28,28 @@ bestReserve = 0
 
 # 	option = ["auction.py", "--loglevel", "debug", "--num-rounds", "48", "--perms", "1", "--iters", "200", "--reserve", str(reserve), "--seed", "2", "--mech=GSP", "AngelSlavBB,5"]
 
-for i in range(64, 101):
+results = []
+
+# for i in range(64, 101):
+# 	reserve = i
+# 	option = ["auction.py", "--loglevel", "debug", "--num-rounds", "48", "--perms", "1", "--iters", "200", "--reserve", str(reserve), "--seed", "2", "--mech=GSP", "AngelSlavBB,5"]
+# 	sys.argv = option
+# 	result = auction.main(sys.argv)
+# 	curRevenue = result[0]
+# 	print("="*50)
+# 	print("==== curRevenue = " + str(curRevenue) + " ==== " + str(reserve) + " ====")
+# 	print("="*50)
+# 	if curRevenue > bestRevenue:
+# 		bestRevenue = curRevenue
+# 		bestReserve = reserve
+
+for i in range(0, 150, 10):
 	reserve = i
-	option = ["auction.py", "--loglevel", "debug", "--num-rounds", "48", "--perms", "1", "--iters", "200", "--reserve", str(reserve), "--seed", "2", "--mech=GSP", "AngelSlavBB,5"]
+	option = ["auction.py", "--loglevel", "debug", "--num-rounds", "48", "--perms", "1", "--iters", "200", "--reserve", str(reserve), "--seed", "2", "--mech=VCG", "Truthful,5"]
 	sys.argv = option
 	result = auction.main(sys.argv)
 	curRevenue = result[0]
+	results.append((reserve, curRevenue))
 	print("="*50)
 	print("==== curRevenue = " + str(curRevenue) + " ==== " + str(reserve) + " ====")
 	print("="*50)
@@ -41,7 +57,9 @@ for i in range(64, 101):
 		bestRevenue = curRevenue
 		bestReserve = reserve
 
-print("Optimal Revenue = " + str(bestRevenue) + ", and reserve price for this revenue is <<" + str(bestReserve) + ">>.")
+print("Revenue per reserve price:\n" + str(results))
+
+# print("Optimal Revenue = " + str(bestRevenue) + ", and reserve price for this revenue is <<" + str(bestReserve) + ">>.")
 
 
 

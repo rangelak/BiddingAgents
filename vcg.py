@@ -58,9 +58,23 @@ class VCG:
             # Implementation Here #
             #######################
 
-            return (0 if k >= n else (c[k]*valid_bids[n][1] if (k == (n-1) and len(valid_bids) > n)
-                else (c[k]*valid_bids[n][1] if (k == (n-1) and len(valid_bids) <= n)
-                    else (c[k] - c[k+1])*just_bids[k+1] + total_payment(k+1))))
+            # print("Len of Valid Bids = " + str(len(valid_bids)))
+            # print(n)
+
+            # return (0 if k >= n else
+            #     (c[k]*valid_bids[n][1] if (k == (n-1) and len(valid_bids) > n)
+            #         else (c[k]*valid_bids[n][1]
+            #             if (k == (n-1) and
+            #                 len(valid_bids) <= n)
+            #                     else (c[k] - c[k+1])*just_bids[k+1] + total_payment(k+1))))
+
+            # toPay = 0
+            if k == (n-1) and len(valid_bids) <= n:
+                return(reserve*c[k])
+            elif k == (n-1) and len(valid_bids) > n:
+                return(max(valid_bids[k+1][1], reserve)*c[k])
+            else:
+                return ((c[k] - c[k+1])*valid_bids[k+1][1] + total_payment(k+1))
 
         def norm(totals):
             """Normalize total payments by the clicks in each slot"""
