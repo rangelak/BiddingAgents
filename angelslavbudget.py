@@ -1,11 +1,16 @@
+"""
+Instructor: David Parkes
+CS136 PSET6: Implementation of the Balanced Bidding Agent
+Authors: Rangel Milushev and Tomislav Zabcic-Matic
+"""
+
 #!/usr/bin/env python
-
 import sys
-
+import random
 from gsp import GSP
 from util import argmax_index
 
-class BBAgent:
+class AngelSlavBudget:
     """Balanced bidding agent"""
     def __init__(self, id, value, budget):
         self.id = id
@@ -13,11 +18,12 @@ class BBAgent:
         self.budget = budget
 
     def initial_bid(self, reserve):
-        return self.value / 2
-
+        #return self.value/4
+        return 0
 
     def slot_info(self, t, history, reserve):
-        """Compute the following for each slot, assuming that everyone else
+        """
+        Compute the following for each slot, assuming that everyone else
         keeps their bids constant from the previous rounds.
 
         Returns list of tuples [(slot_id, min_bid, max_bid)], where
@@ -37,7 +43,7 @@ class BBAgent:
             return (s, min, max)
             
         info = map(compute, range(len(clicks)))
-#        sys.stdout.write("slot info: %s\n" % info)
+        #sys.stdout.write("slot info: %s\n" % info) #for debugging purposes
         return info
 
 
@@ -49,10 +55,44 @@ class BBAgent:
 
         returns a list of utilities per slot.
         """
-        # TODO: Fill this in
-        utilities = []   # Change this
-
         
+        """
+        ******************************
+        * IMPLEMENTATION STARTS HERE *
+        ******************************
+        """
+        # we will fill the utilities list
+        utilities= list()
+        # getting the history for the previous round [clicks, num_slots]
+        previous_round = history.round(t-1)
+        clicks = previous_round.clicks
+        num_slots = len(clicks)
+        
+        """
+        get the information for the slots using the above defined function:
+            Returns list of tuples [(slot_id, min_bid, max_bid)]
+        """
+        slot_information = self.slot_info(t, history, reserve)
+
+        # calculate the utility for every slot
+        for i in range(num_slots):
+
+            alpha = random.uniform(0.5,0.99)
+            # get the slot payment which is the minimum bid from slot_information
+            slot_payment = slot_information[i][1] + (slot_information[i][2] - slot_information[i][1])*alpha
+
+            """
+            If we uncomment the code below in a population of
+            BB agents we get higher utilities on average.
+            """            
+            if i == num_slots-1:
+               slot_payment = reserve            
+    
+            # calculate the utility
+            utility = clicks[i]*(self.value - slot_payment)
+            utilities.append(utility)
+
+        # return the filled list
         return utilities
 
     def target_slot(self, t, history, reserve):
@@ -68,22 +108,36 @@ class BBAgent:
         return info[i]
 
     def bid(self, t, history, reserve):
-        # The Balanced bidding strategy (BB) is the strategy for a player j that, given
-        # bids b_{-j},
-        # - targets the slot s*_j which maximizes his utility, that is,
-        # s*_j = argmax_s {clicks_s (v_j - t_s(j))}.
-        # - chooses his bid b' for the next round so as to
-        # satisfy the following equation:
-        # clicks_{s*_j} (v_j - t_{s*_j}(j)) = clicks_{s*_j-1}(v_j - b')
-        # (p_x is the price/click in slot x)
-        # If s*_j is the top slot, bid the value v_j
+        """
+        The Balanced bidding strategy (BB) is the strategy 
+        for a player j that, given bids b_{-j},
+            - targets the slot s*_j which maximizes his utility, that is,
+                s*_j = argmax_s {clicks_s (v_j - t_s(j))}.
+            - chooses his bid b' for the next round so as to
+                satisfy the following equation:
+                    clicks_{s*_j} (v_j - t_{s*_j}(j)) = 
+                    clicks_{s*_j-1}(v_j - b')
+                (p_x is the price/click in slot x)
+        If s*_j is the top slot, bid the value v_j
+        """
 
-        prev_round = history.round(t-1)
+        previous_round = history.round(t-1)
+        clicks = previous_round.clicks
+        num_clicks = len(clicks)
         (slot, min_bid, max_bid) = self.target_slot(t, history, reserve)
 
-        # TODO: Fill this in.
-        bid = 0  # change this
-        
+        """
+        ******************************
+        * IMPLEMENTATION STARTS HERE *
+        ******************************
+        """
+        utility = None
+        if slot == 0 or min_bid > self.value:
+            bid = self.value
+        else:
+            utility = float(clicks[slot]*(self.value - min_bid))
+            bid = self.value - utility/clicks[slot - 1]
+
         return bid
 
     def __repr__(self):
