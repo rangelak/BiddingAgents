@@ -330,7 +330,6 @@ def main(args):
     total_spent = [0 for i in range(n)]
 
     ##  iters = no. of samples to take
-    print("options = " + str(options))
     for i in range(options.iters):
         values = get_utils(n, options)
         logging.info("==== Iteration %d / %d.  Values %s ====" % (i, options.iters, values))
@@ -380,7 +379,7 @@ def main(args):
     # ERASE LATER #
     ###############
 
-    return (0.01*m, 0.01*std)
+    return (0.01*m, 0.01*std, list(map(lambda x: 0.01*x/N, total_spent)), list(map(lambda x: 0.01*totals[x]/N, totals.keys())))
 
 #print "config", config.budget
     

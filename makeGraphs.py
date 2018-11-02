@@ -43,7 +43,7 @@ ax.legend()
 
 fig.tight_layout()
 plt.show()
-
+fig.savefig("GSP_Truthfuls_5Thru10.png")
 
 
 
