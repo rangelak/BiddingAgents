@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import auction
 import numpy as np
+from statistics import mean 
 import sys
 
-options = [["auction.py", "--loglevel", "debug", "--num-rounds", "48", "--perms", "1", "--iters", "200", "--seed", "2", "--mech=GSP", "Truthful,5"]]
+options = [["auction.py", "--loglevel", "debug", "--num-rounds", "48", "--perms", "1", "--iters", "200", "--seed", "2", "--mech=GSP", "AngelSlavBB,5"]]
 
 # results = list(map(auction.main, options))
 results = []
@@ -14,6 +15,9 @@ for option in options:
 expenditures = results[0][2]
 utilities = results[0][3]
 print("Utilities = " + str(utilities))
+print("Average utility = " + str(mean(utilities)))
+print("Average expenditure = " + str(mean(expenditures)))
+
 
 n_groups = len(expenditures)
 
@@ -38,7 +42,7 @@ ax.set_xlabel('Agents in Auction')
 ax.set_ylabel('Agent Expenditures and Utilities')
 ax.set_title('Average Expenditures and Utilities by Agent')
 ax.set_xticks((index + bar_width/2))
-ax.set_xticklabels(('Truthful1', 'Truthful2', 'Truthful3', 'Truthful4', 'Truthful5'))
+ax.set_xticklabels(('ASModifiedBB1', 'ASModifiedBB2', 'ASModifiedBB3', 'ASModifiedBB4', 'ASModifiedBB5'))
 ax.legend()
 # ax.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 # ax.legend(bbox_to_anchor=(1, 1),
@@ -46,7 +50,7 @@ ax.legend()
 
 fig.tight_layout()
 plt.show()
-fig.savefig("GSP_Truthfuls_5_ExpsUtils.png")
+fig.savefig("GSP_AngelSlavModified_5_ExpsUtils.png")
 
 
 

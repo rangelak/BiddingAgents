@@ -76,9 +76,15 @@ class AngelSlavBB:
 
         # calculate the utility for every slot
         for i in range(num_slots):
-
             # get the slot payment which is the minimum bid from slot_information
             slot_payment = slot_information[i][1]
+
+            """
+            If we uncomment the code below in a population of
+            BB agents we get higher utilities on average.
+            """            
+            #if i == num_slots-1:
+            #   slot_payment = reserve            
     
             # calculate the utility
             utility = clicks[i]*(self.value - slot_payment)
@@ -123,14 +129,13 @@ class AngelSlavBB:
         * IMPLEMENTATION STARTS HERE *
         ******************************
         """
+        utility = None
         if slot == 0 or min_bid > self.value:
             bid = self.value
         else:
-            utility = clicks[slot]*(self.value - min_bid)
+            utility = float(clicks[slot]*(self.value - min_bid))
             bid = self.value - utility/clicks[slot - 1]
-        
 
-        #print("bid is: ",bid)
         return bid
 
     def __repr__(self):
